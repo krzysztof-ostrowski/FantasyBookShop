@@ -1,0 +1,67 @@
+﻿@inject IBookService BookService
+@implements IDisposable
+
+@if(BookService.Books == null || BookService.Books.Count == 0)
+{
+    <span>@BookService.Message</span>
+}
+
+<ul class="list-unstyled">
+    @foreach (var item in BookService.Books)
+    {
+        <li class="media mr-3">
+            <div class="media-img-wrapper mr-2">
+                <a href="#">
+                    <img class="media-img" src="@item.ImageUrl" alt="@item.Title">
+                </a>
+            </div>
+            <div class = "media-body">
+                <a href="/book/@item.Id">
+                    <h4 class="mb-0">@item.Title</h4>
+                </a>
+                <p>@item.Description</p>
+                <h5 class="price">
+                    @GetPriceText(item)
+                </h5>
+            </div>
+        </li>
+    }
+</ul>
+ @for (int i = 1; i < BookService.PageCount; i++)
+{
+    <a class="btn @(i == BookService.CurrentPage ? "btn-info" : "btn-outline-info")
+    page-selection"
+    href = "/search/@BookService.LastSearchText/@i">@i</a>
+}
+
+@code {
+
+
+    protected override void OnInitialized()
+    {
+        BookService.BooksChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        BookService.BooksChanged -= StateHasChanged;
+    }
+
+    private string GetPriceText(Book book)
+    {
+        var variants = book.Variants;
+
+        if (variants.Count == 0)
+        {
+            return string.Empty;
+        }
+        else if (variants.Count == 1)
+        {
+            return $"${variants.ElementAt(0).Price}";
+        }
+
+        decimal minPrice = variants.Min(p=>p.Price);
+        return $"Starting at ${minPrice}";
+    }
+
+}
