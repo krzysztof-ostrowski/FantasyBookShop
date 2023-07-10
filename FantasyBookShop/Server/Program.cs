@@ -1,5 +1,6 @@
 using FantasyBookShop.Server.Data;
 using FantasyBookShop.Server.Services.BookService;
+using FantasyBookShop.Server.Services.CartService;
 using FantasyBookShop.Server.Services.CategoryService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<FantasyBookShopContext>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:FantasyBookShopConnectionString"]));
 builder.Services.AddScoped<IBookService,BookService>();
 builder.Services.AddScoped<ICategoryService,CategoryService>();
+builder.Services.AddScoped<ICartService,CartService>();
 
 var app = builder.Build();
 

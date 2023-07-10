@@ -22,7 +22,6 @@ namespace FantasyBookShop.Server.Data
         {
             modelBuilder.Entity<BookVariant>()
                 .HasKey(b => new { b.BookId, b.BookTypeId });
-            
 
             modelBuilder.Entity<BookCategory>()
                 .HasKey(bc => new { bc.BookId, bc.CategoryId });
@@ -45,7 +44,6 @@ namespace FantasyBookShop.Server.Data
                 .HasOne(b => b.Author)
                 .WithMany(bc => bc.BookAuthors)
                 .HasForeignKey(c => c.AuthorId);
-
 
             modelBuilder.Entity<BookType>().HasData(
                 new BookType { Id = 1, Name = "Hard Cover Book" },
@@ -139,8 +137,6 @@ namespace FantasyBookShop.Server.Data
                 new BookVariant { BookId = 4, BookTypeId = 2, Price = 15m, OriginalPrice = 30m },
                 new BookVariant { BookId = 5, BookTypeId = 2, Price = 20m, OriginalPrice = 40m }
             );
-                
-
         }
     }
 }
