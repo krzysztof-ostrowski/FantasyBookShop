@@ -1,0 +1,66 @@
+﻿@page "/cart"
+@using FantasyBookShop.Shared.Dtos;
+@inject ICartService CartService
+
+<PageTitle>Shopping Cart</PageTitle>
+
+<h3>Shopping Cart</h3>
+
+@if(cartBooks ==null||cartBooks.Count == 0)
+{
+    <span>@message</span>
+}
+else
+{
+    <div>
+        @foreach (var book in cartBooks)
+        {
+            <div class="container">
+                <div class="image-wrapper">
+                    <img src="@book.ImageUrl" class="image">
+            </div>
+            <div class="name">
+                <h5><a href="/book/@book.BookId">@book.Title</a></h5>
+                <span>@book.BookType</span>
+                    <button class="btn-delete" @onclick="@(() =>
+                        RemoveProductFromCart(book.BookId, book.BookTypeId))">
+                        Delete
+                    </button>
+            </div>
+                <div class="cart-item-book-price">$@book.Price</div>
+                </div>
+                }
+                <div class="cart-product-price">
+                    Total (@cartBooks.Count(): $@cartBooks.Sum(b=>b.Price))
+                </div>
+    </div>
+}
+
+@code {
+    List<CartBookResponseDto> cartBooks = null;
+    string message = "Loading cart . . .";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCart();
+    }
+
+    private async Task RemoveProductFromCart(int bookId, int bookTypeId)
+    {
+        await CartService.RemoveBookFromCart(bookId, bookTypeId);
+        await LoadCart();
+    }
+
+    private async Task LoadCart()
+    {
+        if ((await CartService.GetCartItems()).Count == 0)
+        {
+            message = "Your cart is empty.";
+            cartBooks = new();
+        }
+        else
+        {
+            cartBooks = await CartService.GetCartBooks();
+        }
+    }
+}
