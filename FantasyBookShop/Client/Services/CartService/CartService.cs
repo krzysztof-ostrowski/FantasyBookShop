@@ -20,7 +20,18 @@ namespace FantasyBookShop.Client.Services.CartService
         public async Task AddToCart(CartItem cartItem)
         {
             var cart = await GetCart();
-            cart.Add(cartItem);
+
+            var sameItem = cart.Find(x=>x.BookId == cartItem.BookId &&
+            x.BookTypeId == cartItem.BookTypeId);
+
+            if (sameItem == null) 
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                sameItem.Quantity += cartItem.Quantity;
+            }
 
             await _localStorage.SetItemAsync("cart", cart);
 
@@ -56,6 +67,24 @@ namespace FantasyBookShop.Client.Services.CartService
                 await _localStorage.SetItemAsync("cart", cart);
                 OnChange.Invoke();
             }
+        }
+
+        public async Task UpdateQuantity(CartBookResponseDto book)
+        {
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            if(cart == null)
+            {
+                return;
+            }
+            var cartItem = cart.Find(x => x.BookId == book.BookId &&
+            x.BookTypeId == book.BookTypeId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = book.Quantity;
+                await _localStorage.SetItemAsync("cart", cart);
+            }
+
+
         }
 
         private async Task<List<CartItem>> GetCart()

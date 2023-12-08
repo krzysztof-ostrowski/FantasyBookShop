@@ -18,6 +18,7 @@ namespace FantasyBookShop.Server.Data
         public DbSet<BookVariant> BookVariants { get; set; }
         public DbSet<BookAuthor> BookAuthor { get; set; }
         public DbSet<BookCategory> BookCategory { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookVariant>()

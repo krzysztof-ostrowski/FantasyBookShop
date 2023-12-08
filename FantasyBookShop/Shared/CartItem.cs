@@ -10,5 +10,6 @@ namespace FantasyBookShop.Shared
     {
         public int BookId { get; set; }
         public int BookTypeId { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 }

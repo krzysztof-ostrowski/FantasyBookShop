@@ -9,5 +9,6 @@ namespace FantasyBookShop.Client.Services.CartService
         Task<List<CartItem>> GetCartItems();
         Task<List<CartBookResponseDto>> GetCartBooks();
         Task RemoveBookFromCart(int productId, int productTypeId);
+        Task UpdateQuantity(CartBookResponseDto book);
     }
 }

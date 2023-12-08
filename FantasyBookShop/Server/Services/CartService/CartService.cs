@@ -48,6 +48,7 @@ namespace FantasyBookShop.Server.Services.CartService
                     Price = bookVariant.Price,
                     BookType = bookVariant.BookType.Name,
                     BookTypeId = bookVariant.BookTypeId,
+                    Quantity = cartItem.Quantity
                 };
 
                 result.Data.Add(cartBook);
